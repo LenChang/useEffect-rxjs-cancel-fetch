@@ -20,9 +20,9 @@ export const useFruitDetail = (fruitName) => {
     // getFruit(fruitName).then(setFruitDetail);
 
     // Method 3 Rxjs
-    const subscription = defer(() => getFruit(fruitName)).subscribe(
-      setFruitDetail
-    );
+    const obs$ = defer(() => getFruit(fruitName));
+
+    const subscription = obs$.subscribe(setFruitDetail);
 
     return () => {
       subscription.unsubscribe();
