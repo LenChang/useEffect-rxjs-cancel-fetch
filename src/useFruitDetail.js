@@ -1,26 +1,33 @@
-import { useEffect, useState } from 'react';
-import { defer } from 'rxjs';
-import { getFruit } from './api';
+import { useEffect, useState } from "react";
+import { defer } from "rxjs";
+import { getFruit } from "./api";
 
-export const useFruitDetail = fruitName => {
+export const useFruitDetail = (fruitName) => {
   const [fruitDetail, setFruitDetail] = useState(null);
 
-  useEffect(
-    () => {
-      if (!fruitName) {
-        return;
-      }
+  useEffect(() => {
+    if (!fruitName) {
+      return;
+    }
 
-      const subscription = defer(() => getFruit(fruitName)).subscribe(
-        setFruitDetail
-      );
+    // Method 1
+    // getFruit(fruitName).then((data) => {
+    //   console.log(data);
+    //   setFruitDetail(data);
+    // });
 
-      return () => {
-        subscription.unsubscribe();
-      };
-    },
-    [fruitName]
-  );
+    // Method 2
+    // getFruit(fruitName).then(setFruitDetail);
+
+    // Method 3 Rxjs
+    const subscription = defer(() => getFruit(fruitName)).subscribe(
+      setFruitDetail
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [fruitName]);
 
   return fruitDetail;
 };
